@@ -4,7 +4,8 @@ keyword_list = [
     'finance',
     'stocks',
     'modeling',
-    'stock market'
+    'stock market',
+    'ML'
 ]
 
 classifers_list = [
@@ -17,7 +18,7 @@ classifers_list = [
 module1 = Extension('_royal',
                     define_macros = [('USE_PRINTER', '1')],
                     include_dirs = ['include'],
-                    sources = ['src/demo.c'])
+                    sources = ['src/pymain.c'])
 
 setup (name = 'royal',
        version = '0.0.1',
@@ -26,6 +27,8 @@ setup (name = 'royal',
        author_email = 'jweinst1@berkeley.edu',
        url = 'https://github.com/jweinst1/Royal',
        long_description = open('README.md').read(),
+       license = "MIT",
        keyowrds = keyword_list,
        classifiers = classifers_list,
+       packages = ["royal"],
        ext_modules = [module1])

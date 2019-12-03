@@ -8,9 +8,9 @@ static PyObject* print_message(PyObject* self, PyObject* args)
         return NULL;
     }
 #ifdef USE_PRINTER
-    printf("printer %s\n", str_arg);
+    printf("royal %s\n", str_arg);
 #else
-    printf("msg %s\n", str_arg);
+    printf("royal %s\n", str_arg);
 #endif
     // This can also be done with Py_RETURN_NONE
     Py_INCREF(Py_None);
@@ -25,14 +25,14 @@ static PyMethodDef myMethods[] = {
 // Our Module Definition struct
 static struct PyModuleDef myModule = {
     PyModuleDef_HEAD_INIT,
-    "DemoPackage",
-    "A demo module for python c extensions",
+    "_royal",
+    "An economic market modeling library",
     -1,
     myMethods
 };
 
 // Initializes our module using our above struct
-PyMODINIT_FUNC PyInit_DemoPackage(void)
+PyMODINIT_FUNC PyInit__royal(void)
 {
     return PyModule_Create(&myModule);
 }

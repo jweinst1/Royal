@@ -1,4 +1,3 @@
-# This is not used, only for the template
-cmake_minimum_required(VERSION 3.3)
+cmake_minimum_required(VERSION 3.1)
 
-project(cext)
+project(royal)
