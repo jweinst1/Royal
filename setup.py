@@ -21,8 +21,8 @@ module1 = Extension('_royal',
                     sources = ['src/pymain.c'])
 
 setup (name = 'royal',
-       version = '0.0.1',
-       description = 'This is a demo package',
+       version = '0.0.2',
+       description = 'A financial market modeling library',
        author = 'Joshua Weinstein',
        author_email = 'jweinst1@berkeley.edu',
        url = 'https://github.com/jweinst1/Royal',
