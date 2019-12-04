@@ -3,6 +3,7 @@
 
 #include "royal_mem.h"
 
+#ifndef ROYAL_ID_NAME_SIZE
 #define ROYAL_ID_NAME_SIZE 25
 #endif // ROYAL_ID_NAME_SIZE
 
@@ -23,5 +24,9 @@ typedef struct {
 	Royal_Id len;
 	Royal_Id cap;
 } Royal_IdMap;
+
+void Royal_IdMap_init(Royal_IdMap* map, Royal_Id* capac);
+
+void Royal_IdMap_deinit(Royal_IdMap* map);
 
 #endif // ROYAL_IDS_H
