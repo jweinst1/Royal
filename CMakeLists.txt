@@ -17,6 +17,14 @@ if(MSVC)
     add_definitions(-D_CRT_SECURE_NO_WARNINGS)
 endif(MSVC)
 
+find_file(HAVE_STDINT_HEADER stdint.h)
+if(HAVE_STDINT_HEADER)
+   message("** stdint.h found")
+   add_definitions(-DROYAL_HAVE_STDINT_HEADER)
+else(HAVE_STDINT_HEADER)
+   message("** stdint.h not found")
+endif(HAVE_STDINT_HEADER)
+
 # Options
 option(WITH_testing "Allows tests to be run" ON)
 

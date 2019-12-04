@@ -1,11 +1,8 @@
 #ifndef ROYAL_IDS_H
 #define ROYAL_IDS_H
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <stirng.h>
+#include "royal_mem.h"
 
-#ifndef ROYAL_ID_NAME_SIZE
 #define ROYAL_ID_NAME_SIZE 25
 #endif // ROYAL_ID_NAME_SIZE
 
