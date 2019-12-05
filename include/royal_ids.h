@@ -29,4 +29,12 @@ void Royal_IdMap_init(Royal_IdMap* map, Royal_Id* capac);
 
 void Royal_IdMap_deinit(Royal_IdMap* map);
 
+const Royal_Id* Royal_IdMap_find(Royal_IdMap* map, const char* id_name);
+
+void Royal_IdMap_grow(Royal_IdMap* map, Royal_Id new_cap);
+
+const Royal_Id* Royal_IdMap_add(Royal_IdMap* map, const char* id_name);
+
+const char* Royal_IdMap_get(const Royal_IdMap* map, Royal_Id id);
+
 #endif // ROYAL_IDS_H
