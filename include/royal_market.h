@@ -7,10 +7,10 @@ typedef struct {
 	Royal_Id item;
 	double cost_basis;
 	double amount;
-} Royal_CustomerPosition;
+} Royal_CustomerPos;
 
 typedef struct {
-	Royal_CustomerPosition* items;
+	//Royal_CustomerPosition* items;
 	double cash;
 } Royal_Customer;
 

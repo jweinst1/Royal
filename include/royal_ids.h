@@ -37,4 +37,19 @@ const Royal_Id* Royal_IdMap_add(Royal_IdMap* map, const char* id_name);
 
 const char* Royal_IdMap_get(const Royal_IdMap* map, Royal_Id id);
 
+typedef struct {
+	void* data;
+	Royal_Id len;
+	Royal_Id cap;
+	size_t type_size;
+} Royal_IdBuf;
+
+#define ROYAL_IDBUF_GET(buf, idx) ((void*)(((char*)buf->data) + idx * buf->item_size))
+
+void Royal_IdBuf_init(Royal_IdBuf* buf, size_t type_size, Royal_Id* capacity);
+
+#define ROYAL_IDBUF_INIT(buf, objtype) Royal_IdBuf_init(buf, sizeof(objtype), NULL)
+
+void Royal_IdBuf_deinit(Royal_IdBuf* buf);
+
 #endif // ROYAL_IDS_H
