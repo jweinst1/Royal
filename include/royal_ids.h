@@ -58,4 +58,6 @@ void* Royal_IdBuf_get(Royal_IdBuf* buf, Royal_Id idx);
 
 #define ROYAL_IDBUF_RESERVE(buf, nmemb) Royal_IdBuf_grow(buf, nmemb * buf->type_size)
 
+void Royal_IdBuf_put(Royal_IdBuf* buf, Royal_Id idx, void* ptr);
+
 #endif // ROYAL_IDS_H

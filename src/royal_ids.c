@@ -86,10 +86,18 @@ void Royal_IdBuf_deinit(Royal_IdBuf* buf)
 void* Royal_IdBuf_get(Royal_IdBuf* buf, Royal_Id idx)
 {
 	Royal_Id index = idx * buf->type_size;
-	if(index > buf->len) {
-		return NULL;
-	} else {
+	if (index < buf->len) {
 		return ((char*)buf->data) + index;
+	} else {
+		return NULL;
 	}
+}
+
+void Royal_IdBuf_put(Royal_IdBuf* buf, Royal_Id idx, void* ptr)
+{
+	if ((buf->cap - buf->len) < buf->type_size)
+		// Doubling growth upon put
+		Royal_IdBuf_grow(buf, buf->cap * 2);
+	memcpy(buf->data + buf->, ptr, buf->type_size);
 }
 
