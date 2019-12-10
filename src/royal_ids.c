@@ -12,6 +12,10 @@
 #define ROYAL_IDBUF_DEFAULT_CAPACITY 25
 #endif
 
+#ifndef ROYAL_IDBUF_PUT_GROWTH
+#define ROYAL_IDBUF_PUT_GROWTH 10
+#endif
+
 void Royal_IdMap_init(Royal_IdMap* map, Royal_Id* capac)
 {
 	Royal_Id capacity = capac == NULL ? ROYAL_IDMAP_DEFAULT_CAPACITY : *capac;
@@ -64,13 +68,12 @@ void Royal_IdBuf_init(Royal_IdBuf* buf, size_t type_size, Royal_Id* capacity)
 {
 	buf->type_size = type_size;
 	buf->cap = capacity == NULL ? ROYAL_IDBUF_DEFAULT_CAPACITY : *capacity;
-	buf->len = 0;
 	_Royal_alloc(buf->data, (buf->cap * type_size));
 }
 
 void Royal_IdBuf_grow(Royal_IdBuf* buf, size_t new_size)
 {
-	buf->cap = new_size;
+	buf->cap = new_size * buf->type_size;
 	_Royal_realloc(buf->data, buf->data, new_size);
 }
 
@@ -78,7 +81,6 @@ void Royal_IdBuf_deinit(Royal_IdBuf* buf)
 {
 	_Royal_free(buf->data);
 	buf->data = NULL;
-	buf->len = 0;
 	buf->cap = 0;
 	buf->type_size = 0;
 }
@@ -86,7 +88,7 @@ void Royal_IdBuf_deinit(Royal_IdBuf* buf)
 void* Royal_IdBuf_get(Royal_IdBuf* buf, Royal_Id idx)
 {
 	Royal_Id index = idx * buf->type_size;
-	if (index < buf->len) {
+	if (index < buf->cap) {
 		return ((char*)buf->data) + index;
 	} else {
 		return NULL;
@@ -95,9 +97,9 @@ void* Royal_IdBuf_get(Royal_IdBuf* buf, Royal_Id idx)
 
 void Royal_IdBuf_put(Royal_IdBuf* buf, Royal_Id idx, void* ptr)
 {
-	if ((buf->cap - buf->len) < buf->type_size)
-		// Doubling growth upon put
-		Royal_IdBuf_grow(buf, buf->cap * 2);
-	memcpy(buf->data + buf->, ptr, buf->type_size);
+	if (idx >= buf->cap)
+		// Padding growth if put is out of range.
+		Royal_IdBuf_grow(buf, idx + ROYAL_IDBUF_PUT_GROWTH);
+	memcpy((char*)buf->data + (idx * buf->type_size), ptr, buf->type_size);
 }
 

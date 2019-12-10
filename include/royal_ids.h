@@ -39,7 +39,6 @@ const char* Royal_IdMap_get(const Royal_IdMap* map, Royal_Id id);
 
 typedef struct {
 	void* data;
-	Royal_Id len;
 	Royal_Id cap;
 	size_t type_size;
 } Royal_IdBuf;

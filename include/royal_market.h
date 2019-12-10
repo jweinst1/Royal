@@ -10,7 +10,7 @@ typedef struct {
 } Royal_CustomerPos;
 
 typedef struct {
-	//Royal_CustomerPosition* items;
+	Royal_IdBuf positions;
 	double cash;
 } Royal_Customer;
 

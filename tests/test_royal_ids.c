@@ -10,8 +10,8 @@ struct _Test_Type {
 
 static void __Royal_IdBuf_debug(Royal_IdBuf* buf)
 {
-	printf("RoyalIdBuf DEBUG: @(%p) cap(%lu), len(%lu), type_size(%lu), data(%p)\n",
-	                    buf, (unsigned long)buf->cap, (unsigned long)buf->len, (unsigned long)buf->type_size
+	printf("RoyalIdBuf DEBUG: @(%p) cap(%lu), type_size(%lu), data(%p)\n",
+	                    buf, (unsigned long)buf->cap, (unsigned long)buf->type_size
 	                    , buf->data);
 }
 
@@ -20,7 +20,6 @@ static void test_Royal_IdBuf_init(void)
 {
 	Royal_IdBuf test_buf;
 	ROYAL_IDBUF_INIT(&test_buf, struct _Test_Type);
-	CHECK(test_buf.len == 0);
 	CHECK(test_buf.type_size == sizeof(struct _Test_Type));
 	CHECK(test_buf.data != NULL);
 	CHECK(test_buf.cap != 0);
@@ -37,11 +36,43 @@ static void test_Royal_IdBuf_get(void)
 	Royal_IdBuf_init(&test_buf, sizeof(struct _Test_Type), &bufcap);
 	__Royal_IdBuf_debug(&test_buf);
 	CHECK(test_buf.cap == bufcap);
-	test_buf.len++; // manual increase to test only get
 	ptr = Royal_IdBuf_get(&test_buf, tidx);
 	CHECK(ptr != NULL);
 	CHECK(ptr == ((struct _Test_Type*)(test_buf.data)) + tidx);
 	printf("DEBUG: ptr(%p)\n", ptr);
+	Royal_IdBuf_deinit(&test_buf);
+}
+
+static void test_Royal_IdBuf_put(void)
+{
+	Royal_IdBuf test_buf;
+	Royal_Id bufcap = 10;
+	struct _Test_Type memb;
+	struct _Test_Type* ptr;
+	Royal_IdBuf_init(&test_buf, sizeof(struct _Test_Type), &bufcap);
+	memb.a = 77;
+	memb.msg[0] = '3';
+	Royal_IdBuf_put(&test_buf, 1, &memb);
+	ptr = Royal_IdBuf_get(&test_buf, 1);
+	CHECK(ptr->a == 77);
+	CHECK(ptr->msg[0] == '3');
+	Royal_IdBuf_deinit(&test_buf);
+}
+
+static void test_Royal_IdBuf_put2(void)
+{
+	Royal_IdBuf test_buf;
+	Royal_Id bufcap = 10;
+	struct _Test_Type memb;
+	struct _Test_Type* ptr;
+	Royal_IdBuf_init(&test_buf, sizeof(struct _Test_Type), &bufcap);
+	memb.a = 77;
+	memb.msg[0] = '3';
+	Royal_IdBuf_put(&test_buf, 15, &memb);
+	__Royal_IdBuf_debug(&test_buf);
+	ptr = Royal_IdBuf_get(&test_buf, 15);
+	CHECK(ptr->a == 77);
+	CHECK(ptr->msg[0] == '3');
 	Royal_IdBuf_deinit(&test_buf);
 }
 
@@ -53,5 +84,7 @@ int main(int argc, char const *argv[])
 {
 	test_Royal_IdBuf_init();
 	test_Royal_IdBuf_get();
+	test_Royal_IdBuf_put();
+	test_Royal_IdBuf_put2();
 	RETURN_FAILURES
 }
