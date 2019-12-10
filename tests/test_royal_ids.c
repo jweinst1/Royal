@@ -34,12 +34,10 @@ static void test_Royal_IdBuf_get(void)
 	Royal_Id bufcap = 10;
 	struct _Test_Type* ptr = NULL;
 	Royal_IdBuf_init(&test_buf, sizeof(struct _Test_Type), &bufcap);
-	__Royal_IdBuf_debug(&test_buf);
 	CHECK(test_buf.cap == bufcap);
 	ptr = Royal_IdBuf_get(&test_buf, tidx);
 	CHECK(ptr != NULL);
 	CHECK(ptr == ((struct _Test_Type*)(test_buf.data)) + tidx);
-	printf("DEBUG: ptr(%p)\n", ptr);
 	Royal_IdBuf_deinit(&test_buf);
 }
 
@@ -71,6 +69,7 @@ static void test_Royal_IdBuf_put2(void)
 	Royal_IdBuf_put(&test_buf, 15, &memb);
 	__Royal_IdBuf_debug(&test_buf);
 	ptr = Royal_IdBuf_get(&test_buf, 15);
+	CHECK(ptr != NULL);
 	CHECK(ptr->a == 77);
 	CHECK(ptr->msg[0] == '3');
 	Royal_IdBuf_deinit(&test_buf);

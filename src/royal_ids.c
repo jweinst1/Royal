@@ -73,8 +73,8 @@ void Royal_IdBuf_init(Royal_IdBuf* buf, size_t type_size, Royal_Id* capacity)
 
 void Royal_IdBuf_grow(Royal_IdBuf* buf, size_t new_size)
 {
-	buf->cap = new_size * buf->type_size;
-	_Royal_realloc(buf->data, buf->data, new_size);
+	buf->cap = new_size;
+	_Royal_realloc(buf->data, buf->data, new_size * buf->type_size);
 }
 
 void Royal_IdBuf_deinit(Royal_IdBuf* buf)
@@ -87,9 +87,9 @@ void Royal_IdBuf_deinit(Royal_IdBuf* buf)
 
 void* Royal_IdBuf_get(Royal_IdBuf* buf, Royal_Id idx)
 {
-	Royal_Id index = idx * buf->type_size;
+	Royal_Id index = idx;
 	if (index < buf->cap) {
-		return ((char*)buf->data) + index;
+		return ((char*)buf->data) + (index * buf->type_size);
 	} else {
 		return NULL;
 	}
