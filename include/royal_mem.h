@@ -5,6 +5,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <limits.h>
+#include <assert.h>
 
 #if defined(UINT_MAX) && UINT_MAX == 0xffffffff
 #  define ROYAL_CCHECK_INT_32BIT
@@ -40,5 +41,16 @@
 #else // !ROYAL_MEM_DEBUG
 #  define _Royal_free(ptr) free(ptr)
 #endif
+
+#ifndef ROYAL_ASSERT_EXIT_CODE
+#define ROYAL_ASSERT_EXIT_CODE 33
+#endif            
+
+#define _Royal_assert(exp) if(!(exp)) { \
+                     fprintf(stderr, "FATAL: exp '%s' asserts at line: %u\n", \
+                     #exp, \
+                     	(unsigned)__LINE__);  \
+                     exit(ROYAL_ASSERT_EXIT_CODE); \
+                      }
                      
 #endif // ROYAL_MEM_H

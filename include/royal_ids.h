@@ -53,9 +53,9 @@ void Royal_IdBuf_deinit(Royal_IdBuf* buf);
 
 void Royal_IdBuf_grow(Royal_IdBuf* buf, size_t new_size);
 
-void* Royal_IdBuf_get(Royal_IdBuf* buf, Royal_Id idx);
+void* Royal_IdBuf_get(const Royal_IdBuf* buf, Royal_Id idx);
 
-#define ROYAL_IDBUF_RESERVE(buf, nmemb) Royal_IdBuf_grow(buf, nmemb * buf->type_size)
+#define ROYAL_IDBUF_RESERVE(buf, nmemb) Royal_IdBuf_grow(buf, nmemb)
 
 void Royal_IdBuf_put(Royal_IdBuf* buf, Royal_Id idx, void* ptr);
 

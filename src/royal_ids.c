@@ -85,7 +85,7 @@ void Royal_IdBuf_deinit(Royal_IdBuf* buf)
 	buf->type_size = 0;
 }
 
-void* Royal_IdBuf_get(Royal_IdBuf* buf, Royal_Id idx)
+void* Royal_IdBuf_get(const Royal_IdBuf* buf, Royal_Id idx)
 {
 	Royal_Id index = idx;
 	if (index < buf->cap) {
