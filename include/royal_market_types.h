@@ -37,7 +37,17 @@ typedef struct {
 	double current_price;
 } Royal_Item;
 
+typedef enum {
+	ROYAL_MARKET_STATUS_OK = 0,
+	ROYAL_MARKET_STATUS_ITEM_NOT_FND,
+	ROYAL_MARKET_STATUS_CUST_NOT_FND,
+	ROYAL_MARKET_STATUS_N_ENG_CASH,
+	ROYAL_MARKET_STATUS_ZERO_VOL,
+	ROYAL_MARKET_STATUS_CUST_AEXIST
+} Royal_MarketStatus;
+
 typedef unsigned long Royal_MarketTurn;
+typedef unsigned int Royal_MarketVotality;
 
 typedef struct {
 	Royal_IdBuf items;
@@ -45,6 +55,7 @@ typedef struct {
 	Royal_IdBuf customers;
 	Royal_IdMap cust_names;
 	Royal_MarketTurn turn;
+	Royal_MarketVotality vol;
 } Royal_Market;
 
 #endif // ROYAL_MARKEt_TYPES_H

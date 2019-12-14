@@ -103,3 +103,11 @@ void Royal_IdBuf_put(Royal_IdBuf* buf, Royal_Id idx, void* ptr)
 	memcpy((char*)buf->data + (idx * buf->type_size), ptr, buf->type_size);
 }
 
+void* Royal_IdBuf_ret(Royal_IdBuf* buf, Royal_Id idx)
+{
+	if (idx >= buf->cap)
+		// Padding growth if put is out of range.
+		Royal_IdBuf_grow(buf, idx + ROYAL_IDBUF_PUT_GROWTH);
+	return ((char*)buf->data) + (idx * buf->type_size);
+}
+

@@ -58,5 +58,9 @@ void* Royal_IdBuf_get(const Royal_IdBuf* buf, Royal_Id idx);
 #define ROYAL_IDBUF_RESERVE(buf, nmemb) Royal_IdBuf_grow(buf, nmemb)
 
 void Royal_IdBuf_put(Royal_IdBuf* buf, Royal_Id idx, void* ptr);
+/**
+ * Similar to \c Royal_IdBuf_get, but returns and initializes the slot.
+ */
+void* Royal_IdBuf_ret(Royal_IdBuf* buf, Royal_Id idx);
 
 #endif // ROYAL_IDS_H
