@@ -14,8 +14,10 @@ typedef struct {
 } Royal_Customer;
 
 typedef enum {
-	ROYAL_ORDERTYPE_MARKET,
-	ROYAL_ORDERTYPE_LIMIT
+	ROYAL_ORDERTYPE_MARKET_SELL,
+	ROYAL_ORDERTYPE_LIMIT_SELL,
+	ROYAL_ORDERTYPE_MARKET_BUY,
+	ROYAL_ORDERTYPE_LIMIT_BUY
 } Royal_OrderType;
 
 typedef struct {
@@ -32,8 +34,8 @@ typedef struct {
 } Royal_OrderQueue;
 
 typedef struct {
-	Royal_OrderQueue* buy_orders;
-	Royal_OrderQueue* sell_orders;
+	Royal_OrderQueue buy_orders;
+	Royal_OrderQueue sell_orders;
 	double current_price;
 } Royal_Item;
 
@@ -43,7 +45,7 @@ typedef enum {
 	ROYAL_MARKET_STATUS_CUST_NOT_FND,
 	ROYAL_MARKET_STATUS_N_ENG_CASH,
 	ROYAL_MARKET_STATUS_ZERO_VOL,
-	ROYAL_MARKET_STATUS_CUST_AEXIST
+	ROYAL_MARKET_STATUS_AEXIST
 } Royal_MarketStatus;
 
 typedef unsigned long Royal_MarketTurn;

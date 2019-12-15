@@ -75,7 +75,28 @@ static void test_Royal_IdBuf_put2(void)
 	Royal_IdBuf_deinit(&test_buf);
 }
 
+struct test_slot_t {
+	long a;
+	long b;
+};
 
+static void test_Royal_IdBuf_ret(void)
+{
+	Royal_IdBuf test_buf;
+	struct test_slot_t* ptr;
+	struct test_slot_t* got;
+	Royal_Id bufcap = 10;
+	Royal_IdBuf_init(&test_buf, sizeof(struct test_slot_t), &bufcap);
+	ptr = Royal_IdBuf_ret(&test_buf, 14);
+	CHECK(test_buf.cap > bufcap);
+	CHECK(ptr > (struct test_slot_t*)(test_buf.data));
+	ptr->a = 88;
+	ptr->b = 44;
+	got = Royal_IdBuf_get(&test_buf, 14);
+	CHECK(got->a == 88);
+	CHECK(got->b == 44);
+	Royal_IdBuf_deinit(&test_buf);
+}
 
 
 
@@ -85,5 +106,6 @@ int main(int argc, char const *argv[])
 	test_Royal_IdBuf_get();
 	test_Royal_IdBuf_put();
 	test_Royal_IdBuf_put2();
+	test_Royal_IdBuf_ret();
 	RETURN_FAILURES
 }
