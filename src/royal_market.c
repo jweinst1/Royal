@@ -116,6 +116,19 @@ Royal_MarketStatus Royal_Market_make_order(Royal_Market* m,
 	                                       double amount,
 	                                       double price)
 {
-	
+	Royal_Item* item = Royal_IdBuf_get(&(m->items), item_id);
+	Royal_Customer* cust = Royal_IdBuf_get(&(m->customers), cust_id);
+	if(item == NULL || cust == NULL)
+		return ROYAL_MARKET_STATUS_NEXIST;
+	switch(type) {
+		case ROYAL_ORDERTYPE_LIMIT_SELL:
+		case ROYAL_ORDERTYPE_MARKET_SELL:
+		     Royal_OrderQueue_push(&(item->sell_orders), cust, type, amount, price);
+		     break;
+		case ROYAL_ORDERTYPE_LIMIT_BUY:
+		case ROYAL_ORDERTYPE_MARKET_BUY:
+		     Royal_OrderQueue_push(&(item->buy_orders), cust, type, amount, price);
+		     break;
+	}
 	return ROYAL_MARKET_STATUS_OK;
 }
