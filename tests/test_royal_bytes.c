@@ -84,11 +84,25 @@ static void test_ByteBuf_append2(void)
 	Royal_ByteBuf_deinit(&buff);
 }
 
+static void test_ByteBuf_read(void)
+{
+	Royal_ByteBuf buff;
+	long foo = 0;
+	long doo = 55;
+	Royal_ByteBuf_init(&buff, NULL);
+	CHECK(NULL != ROYAL_BYTEBUF_APPEND(&buff, doo));
+	CHECK(NULL != ROYAL_BYTEBUF_APPEND(&buff, doo));
+	CHECK(Royal_ByteBuf_read(&buff, 0, &foo, sizeof(foo)));
+	CHECK(foo == 55);
+	Royal_ByteBuf_deinit(&buff);
+}
+
 int main(int argc, char const *argv[])
 {
 	test_ByteBuf_init();
 	test_ByteBuf_deinit();
 	test_ByteBuf_append();
 	test_ByteBuf_append2();
+	test_ByteBuf_read();
 	RETURN_FAILURES
 }
