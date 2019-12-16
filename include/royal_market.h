@@ -23,6 +23,10 @@ void Royal_OrderQueue_push(Royal_OrderQueue* q, Royal_Customer* cust,
 #define ROYAL_ORDERQUEUE_CLEAR(q) (q->len = 0)
 
 void Royal_Item_init(Royal_Item* item, double start_price);
+/**
+ * Calculates the change in price based on existing orders.
+ */
+double Royal_Item_price_change(const Royal_Item* item);
 
 Royal_MarketStatus Royal_Market_init(Royal_Market* market, Royal_MarketVotality vol);
 

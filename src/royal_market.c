@@ -67,6 +67,33 @@ void Royal_Item_init(Royal_Item* item, double start_price)
 	item->current_price = start_price;
 }
 
+double Royal_Item_price_change(const Royal_Item* item)
+{
+	const Royal_Order* cur_ord;
+	const Royal_Order* end_ord;
+	double total_buy = 0.0;
+	double total_sell = 0.0;
+	// traverse buys
+	cur_ord = item->buy_orders.orders;
+	end_ord = cur_ord + item->buy_orders.len;
+	if (item->buy_orders.len == 0) {
+		total_buy = 0.08;
+	} else while(cur_ord != end_ord) {
+		total_buy += cur_ord->amount * cur_ord->price;
+		++cur_ord;
+	}
+	// traverse sells
+	cur_ord = item->sell_orders.orders;
+	end_ord = cur_ord + item->sell_orders.len;
+	if (item->sell_orders.len == 0) {
+		total_sell = 1.0;
+	} else while(cur_ord != end_ord) {
+		total_sell += cur_ord->amount * cur_ord->price;
+		++cur_ord;
+	}
+	return item->current_price - (total_buy / total_sell);
+}
+
 Royal_MarketStatus Royal_Market_init(Royal_Market* market, Royal_MarketVotality vol)
 {
 	if(vol == 0)
