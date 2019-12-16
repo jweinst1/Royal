@@ -60,10 +60,35 @@ static void test_ByteBuf_append(void)
 	Royal_ByteBuf_deinit(&buff);
 }
 
+static void test_ByteBuf_append2(void)
+{
+	Royal_ByteBuf buff;
+	double* gota;
+	double* gotb;
+	double* gotc;
+	size_t cap = 20;
+	double a = 4.55;
+	double b = 3.55;
+	double c = 60.0;
+	Royal_ByteBuf_init(&buff, &cap);
+	gota = ROYAL_BYTEBUF_APPEND(&buff, a);
+	gotb = ROYAL_BYTEBUF_APPEND(&buff, b);
+	CHECK(gota != NULL);
+	CHECK(*gota == 4.55);
+	CHECK(buff.len == (sizeof(double) * 2));
+	gotc = ROYAL_BYTEBUF_APPEND(&buff, c);
+	CHECK(gotc != NULL);
+	CHECK(*gotc == 60.0);
+	CHECK(*gotb == 3.55);
+	CHECK(buff.cap > cap);
+	Royal_ByteBuf_deinit(&buff);
+}
+
 int main(int argc, char const *argv[])
 {
 	test_ByteBuf_init();
 	test_ByteBuf_deinit();
 	test_ByteBuf_append();
+	test_ByteBuf_append2();
 	RETURN_FAILURES
 }
