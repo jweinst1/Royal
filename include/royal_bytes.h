@@ -1,6 +1,7 @@
 #ifndef ROYAL_BYTES_H
 #define ROYAL_BYTES_H
 
+#include <stdarg.h>
 #include "royal_mem.h"
 
 typedef struct {
@@ -16,6 +17,8 @@ void Royal_ByteBuf_grow(Royal_ByteBuf* buf, size_t new_size);
 void* Royal_ByteBuf_append(Royal_ByteBuf* buf, size_t size, void* obj);
 
 int Royal_ByteBuf_read(Royal_ByteBuf* buf, size_t offset, void* dest, size_t dsize);
+
+int Royal_ByteBuf_pack(Royal_ByteBuf* buf, const char* fmt, ...);
 
 void Royal_ByteBuf_deinit(Royal_ByteBuf* buf);
 

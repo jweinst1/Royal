@@ -8,6 +8,13 @@
 #define ROYAL_BYTEBUF_GROW_PAD 2
 #endif
 
+union _packing_station {
+	double _dbl;
+	unsigned char _uch;
+	char _ch;
+	const char* _strn;
+};
+
 void Royal_ByteBuf_init(Royal_ByteBuf* buf, size_t* capac)
 {
 	size_t capacity = (capac == NULL ? ROYAL_BYTEBUF_DEFAULT_CAP : *capac) * sizeof(unsigned char);
@@ -44,6 +51,14 @@ int Royal_ByteBuf_read(Royal_ByteBuf* buf, size_t offset, void* dest, size_t dsi
 		memcpy(dest, buf->data + offset, dsize);
 		return 1;
 	}
+}
+
+int Royal_ByteBuf_pack(Royal_ByteBuf* buf, const char* fmt, ...)
+{
+	va_list to_pack;
+	va_start(to_pack, fmt);
+	va_end(to_pack);
+	return 1;
 }
 
 void Royal_ByteBuf_deinit(Royal_ByteBuf* buf)
