@@ -10,8 +10,8 @@
 
 union _packing_station {
 	double _dbl;
+	unsigned _size;
 	unsigned char _uch;
-	char _ch;
 	const char* _strn;
 };
 
@@ -30,7 +30,7 @@ void Royal_ByteBuf_grow(Royal_ByteBuf* buf, size_t new_size)
 	_Royal_realloc(buf->data, buf->data, new_size);
 }
 
-void* Royal_ByteBuf_append(Royal_ByteBuf* buf, size_t size, void* obj)
+void* Royal_ByteBuf_append(Royal_ByteBuf* buf, size_t size, const void* obj)
 {
 	void* ret;
 	if(size > ROYAL_BYTEBUF_SPACE(buf)) {
@@ -56,7 +56,35 @@ int Royal_ByteBuf_read(Royal_ByteBuf* buf, size_t offset, void* dest, size_t dsi
 int Royal_ByteBuf_pack(Royal_ByteBuf* buf, const char* fmt, ...)
 {
 	va_list to_pack;
+	unsigned str_size;
+	union _packing_station packer;
 	va_start(to_pack, fmt);
+	while(*fmt) {
+		switch(*fmt++) {
+			case 'b':
+			   packer._uch = va_arg(to_pack, unsigned char);
+			   Royal_ByteBuf_append(buf, sizeof(unsigned char), &(packer._uch));
+			   break;
+			case 's':
+			   packer._strn = va_arg(to_pack, const char*);
+			   str_size = (unsigned)(strlen(packer._strn) + 1);
+			   Royal_ByteBuf_append(buf, sizeof(unsigned), &str_size);
+			   Royal_ByteBuf_append(buf, str_size, packer._strn);
+			   break;
+			case 'd':
+			   packer._dbl = va_arg(to_pack, double);
+			   Royal_ByteBuf_append(buf, sizeof(double), &(packer._dbl));
+			   break;
+			case 'u':
+			   packer._size = va_arg(to_pack, unsigned);
+			   Royal_ByteBuf_append(buf, sizeof(unsigned), &(packer._size));
+			   break;
+			default:
+			   // unknown format character.
+			   va_end(to_pack);
+			   return 0;
+		}
+	}
 	va_end(to_pack);
 	return 1;
 }

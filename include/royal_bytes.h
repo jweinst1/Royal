@@ -14,7 +14,7 @@ void Royal_ByteBuf_init(Royal_ByteBuf* buf, size_t* capac);
 
 void Royal_ByteBuf_grow(Royal_ByteBuf* buf, size_t new_size);
 
-void* Royal_ByteBuf_append(Royal_ByteBuf* buf, size_t size, void* obj);
+void* Royal_ByteBuf_append(Royal_ByteBuf* buf, size_t size, const void* obj);
 
 int Royal_ByteBuf_read(Royal_ByteBuf* buf, size_t offset, void* dest, size_t dsize);
 
