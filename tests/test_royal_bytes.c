@@ -72,6 +72,19 @@ static void test_ByteBuf_read(void)
 	Royal_ByteBuf_deinit(&buff);
 }
 
+static void test_ByteBuf_pack(void)
+{
+	Royal_ByteBuf buff;
+	const char* mes = "foo";
+	unsigned sizer = 554;
+	unsigned outs = 0;
+	Royal_ByteBuf_init(&buff, NULL);
+	CHECK(Royal_ByteBuf_pack(&buff, "us", sizer, mes));
+	CHECK(Royal_ByteBuf_read(&buff, 0, &outs, sizeof(outs)));
+	CHECK(outs == 554);
+	Royal_ByteBuf_deinit(&buff);
+}
+
 int main(int argc, char const *argv[])
 {
 	test_ByteBuf_init();
@@ -79,5 +92,6 @@ int main(int argc, char const *argv[])
 	test_ByteBuf_append();
 	test_ByteBuf_append2();
 	test_ByteBuf_read();
+	test_ByteBuf_pack();
 	RETURN_FAILURES
 }
