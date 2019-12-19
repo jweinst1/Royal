@@ -1,3 +1,4 @@
-import _royal
-
-# This is where Python wrapping code will go in the future
+try:
+	import _royal
+except ImportError:
+	print("Cannot load the C extension module")
