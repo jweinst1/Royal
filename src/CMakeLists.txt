@@ -4,7 +4,6 @@ include_directories(${PROJECT_SOURCE_DIR}/include)
 
 set(ROYAL_CLIB_SOURCES
    royal_ids.c
-   royal_market.c
    royal_bytes.c
 )
 
