@@ -1,4 +1,5 @@
 graft include
+graft pytests
 include README.md
 include LICENSE
 include CMakeLists.txt

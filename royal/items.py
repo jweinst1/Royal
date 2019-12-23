@@ -87,10 +87,10 @@ class RoyalItemMarket(object):
 		MARKET_HEADER.pack_into(self.buf, 0, 
 			                    self.sizer.total_size,
 			                    0, 
-			                    self.customer_count, self.item_count
+			                    self.customer_count, self.item_count,
 			                    self.order_count, self.strategy_count,
 			                    0, 
-			                    -1, 0
+			                    -1, 0,
 			                    self.votality)
 
 	def __repr__(self):
