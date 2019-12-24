@@ -50,4 +50,16 @@ typedef struct {
 	double price;
 } Royal_ItemMarket_Order;
 
+#define ROYAL_ITEM_MARKET_ITEM_SIZE(orders) ((sizeof(Royal_ItemMarket_Order) * orders * 2) + sizeof(Royal_ItemMarket_Item))
+#define ROYAL_ITEM_MARKET_ITEMS_SIZE(items, orders) (ROYAL_ITEM_MARKET_ITEM_SIZE(orders) * items)
+
+#define ROYAL_ITEM_MARKET_CUST_SIZE(strats, items) ((sizeof(Royal_ItemMarket_Strategy) * strats)  \
+                                                   + (sizeof(Royal_ItemMarket_Position) * items) \
+                                                    + sizeof(Royal_ItemMarket_Customer))
+#define ROYAL_ITEM_MARKET_CUSTS_SIZE(strats, items, custs) (ROYAL_ITEM_MARKET_CUST_SIZE(strats, items) * custs)
+
+#define ROYAL_ITEM_MARKET_SIZE(items, custs, orders, strats) (sizeof(Royal_ItemMarket_Header) \
+                                                              + ROYAL_ITEM_MARKET_CUSTS_SIZE(strats, items, custs) \
+                                                              + ROYAL_ITEM_MARKET_ITEMS_SIZE(items, orders))
+
 #endif // ROYAL_ITEM_MARKET_H

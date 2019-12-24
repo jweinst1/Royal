@@ -1,4 +1,5 @@
 import struct
+from .schema_tools import SchemaValidator, SchemaValidationError
 
 # - Size of the market (I)
 # - Number of turns (L)
@@ -14,7 +15,7 @@ MARKET_HEADER = struct.Struct("ILIIIIBiid")
 
 # - current price (d)
 # - current order state (i, off is -1), used for exec or
-#   placing orders, when an order queue is full.
+#     placing orders, when an order queue is full.
 # - String name of item (32s, last must be \0)
 ITEMS_SCHEMA = struct.Struct("di32s")
 # - type of order (B)
@@ -39,34 +40,26 @@ STRATEGIES_SCHEMA = struct.Struct("BIdBIdd")
 # - the cost basis of the position
 POSITIONS_SCHEMA = struct.Struct("dd")
 
-class RoyalItemError(Exception):
-	
-	@staticmethod
-	def market_validate(args):
-		if 'items' not in args:
-			raise RoyalItemError("Argument 'items' is missing")
-		if 'orders' not in args:
-			raise RoyalItemError("Argument 'orders' is missing")
-		if 'customers' not in args:
-			raise RoyalItemError("Argument 'customers', is missing")
-		if 'strategies' not in agrs:
-			raise RoyalItemError("Argument 'strategies' is missing")
+OBJECT_MARKET_SCHEMAS = {
+	'customer':SchemaValidator(name=str, cash=float),
+	'item':SchemaValidator(name=str, price=float),
+	'market':SchemaValidator(items=int, orders=int, customers=int, strategies=int)
+}
 
-	@staticmethod
-	def sizer_validate(args):
-		if 0 in args:
-			raise RoyalItemError("Market construction arguments cannot be 0")
+class RoyalItemError(Exception):
+	pass
 
 class RoyalItemSizer(object):
 	"""
 	Used to calculate and determine sizing of item markets.
 	"""
 	def __init__(self, items, orders, customers, strategies):
-		RoyalItemError.sizer_validate((items, orders, customers, strategies))
+		if 0 in (items, orders, customers, strategies):
+			raise RoyalItemError("Market construction arguments cannot be 0")
 		self.header = MARKET_HEADER.size
 		# Buying and Selling
 		self.item = (ORDERS_SCHEMA.size * orders * 2) + ITEMS_SCHEMA.size
-		self.customer = (STRATEGIES_SCHEMA.size * strategies) + (POSITIONS_SCHEMA.size * items)
+		self.customer = (STRATEGIES_SCHEMA.size * strategies) + (POSITIONS_SCHEMA.size * items) + CUSTOMERS_SCHEMA.size
 		self.items = self.item * items
 		self.customers = self.customer * customers
 		self.total_size = self.items + self.customers + self.header
@@ -76,7 +69,7 @@ class RoyalItemSizer(object):
 class RoyalItemMarket(object):
 	
 	def __init__(self, **kwargs):
-		RoyalItemError.market_validate(kwargs)
+		OBJECT_MARKET_SCHEMAS['market'].validate(kwargs)
 		self.item_count = kwargs['items']
 		self.order_count = kwargs['orders']
 		self.customer_count = kwargs['customers']
@@ -104,3 +97,27 @@ class RoyalItemMarket(object):
 		base_str += ", max strategies:" + str(market_info[5])
 		base_str += "\n"
 		return base_str
+
+	def __len__(self):
+		return len(self.buf)
+
+class RoyalItemBuilder(object):
+
+	def __init__(self):
+		self.items = {}
+		self.customers = {}
+		self.votality = 1.0
+		self.max_orders = 20
+		self.max_strategies = 20
+		self.market = None
+
+	def add_item(self, *args):
+		for arg in args:
+			OBJECT_MARKET_SCHEMAS['item'].validate(arg)
+			self.items.update(arg)
+
+	def add_customer(self, *args):
+		for arg in args:
+			OBJECT_MARKET_SCHEMAS['customer'].validate(arg)
+			self.customers.update(arg)
+
