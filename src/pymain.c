@@ -26,7 +26,7 @@ static PyMethodDef myMethods[] = {
 static struct PyModuleDef myModule = {
     PyModuleDef_HEAD_INIT,
     "_royal",
-    "An economic market modeling library",
+    "A graph data format library",
     -1,
     myMethods
 };

@@ -1,10 +1,10 @@
 from distutils.core import setup, Extension
 
 keyword_list = [
-    'finance',
-    'stocks',
-    'modeling',
-    'stock market',
+    'graphs',
+    'graph',
+    'data science',
+    'big data',
     'ML'
 ]
 
@@ -22,7 +22,7 @@ module1 = Extension('_royal',
 
 setup (name = 'royal',
        version = '0.0.2',
-       description = 'A financial market modeling library',
+       description = 'A graph data format library',
        author = 'Joshua Weinstein',
        author_email = 'jweinst1@berkeley.edu',
        url = 'https://github.com/jweinst1/Royal',

@@ -3,13 +3,9 @@
 
 ## Intro
 
-`royal` is a library and framework for building economic market models. It provides a way to create an artifical market, where you control the items, the customers, and the orders processed for it. It can also provide a model of a stock market, or a currency exchange.
+`royal` is a library and framework for handling graph data. Unlike other data file formats or libraries, `royal` specializes in storing relationships between objects and data points. `royal` is not a graph database, it allows abstraction and processing of
+graph relationships in the form of transportable data.
 
-## Purpose
-
-The stock market can often times be unpredictable. It's composed of billions of trades across thousands of securities, stemming from thousands of customers. The data we have on the stock market is limited and difficult to understand without knowing what drives it.
-
-Royal is an artifical trading or stock exchange environment used for research and modeling. It's intended to allow further and closer examination of the behaviors exhibited in trading markets.
 
 ## Development Status
 
