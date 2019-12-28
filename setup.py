@@ -30,5 +30,4 @@ setup (name = 'royal',
        license = "MIT",
        keyowrds = keyword_list,
        classifiers = classifers_list,
-       packages = ["royal"],
        ext_modules = [module1])
