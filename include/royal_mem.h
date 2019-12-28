@@ -38,6 +38,14 @@ typedef unsigned __int64 uint64_t;
 #endif
 
 #ifdef ROYAL_MEM_DEBUG
+#  define _Royal_malloc(ptr, size) \
+                     (ptr) = malloc(size); \
+                     printf("Royal DEBUG: size %lu (Malloc) -> %p\n", (unsigned long)size, ptr)
+#else // !ROYAL_MEM_DEBUG
+#  define _Royal_alloc(ptr, size) (ptr) = malloc(size)
+#endif
+
+#ifdef ROYAL_MEM_DEBUG
 #  define _Royal_realloc(new_ptr, old_ptr, new_size) \
                      (new_ptr) = (realloc((old_ptr), (new_size)); \
                      printf("Royal DEBUG: size %lu (Realloc) %p -> %p\n", (unsigned long)new_size, old_ptr, new_ptr)
