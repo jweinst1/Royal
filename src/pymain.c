@@ -25,7 +25,7 @@ static PyMethodDef myMethods[] = {
 // Our Module Definition struct
 static struct PyModuleDef myModule = {
     PyModuleDef_HEAD_INIT,
-    "_royal",
+    "royal",
     "A graph data format library",
     -1,
     myMethods

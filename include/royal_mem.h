@@ -42,7 +42,7 @@ typedef unsigned __int64 uint64_t;
                      (ptr) = malloc(size); \
                      printf("Royal DEBUG: size %lu (Malloc) -> %p\n", (unsigned long)size, ptr)
 #else // !ROYAL_MEM_DEBUG
-#  define _Royal_alloc(ptr, size) (ptr) = malloc(size)
+#  define _Royal_malloc(ptr, size) (ptr) = malloc(size)
 #endif
 
 #ifdef ROYAL_MEM_DEBUG
