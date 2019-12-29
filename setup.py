@@ -1,4 +1,5 @@
 from distutils.core import setup, Extension
+import os
 
 keyword_list = [
     'graphs',
@@ -15,10 +16,15 @@ classifers_list = [
     'Operating System :: Unix'
 ]
 
-module1 = Extension('_royal',
-                    define_macros = [('USE_PRINTER', '1')],
+macro_defs = []
+
+if os.name == 'nt':
+  macro_defs.append(('_CRT_SECURE_NO_WARNINGS', '1'))
+
+module1 = Extension('royal',
+                    define_macros = macro_defs,
                     include_dirs = ['include'],
-                    sources = ['src/pymain.c'])
+                    sources = ['src/pymain.c', 'src/royal_graphs.c'])
 
 setup (name = 'royal',
        version = '0.0.2',
@@ -28,6 +34,6 @@ setup (name = 'royal',
        url = 'https://github.com/jweinst1/Royal',
        long_description = open('README.md').read(),
        license = "MIT",
-       keyowrds = keyword_list,
+       keywords = keyword_list,
        classifiers = classifers_list,
        ext_modules = [module1])

@@ -67,11 +67,17 @@ typedef unsigned __int64 uint64_t;
 #define ROYAL_ASSERT_EXIT_CODE 33
 #endif            
 
-#define _Royal_assert(exp) if(!(exp)) { \
-                     fprintf(stderr, "FATAL: exp '%s' asserts at line: %u\n", \
+#ifndef _MSC_VER
+#   define _Royal_assert(exp) if (!(exp)) { \
+                     fprintf(stderr, "FATAL: exp '%s' asserts at line: %u, file:%s\n", \
                      #exp, \
-                     	(unsigned)__LINE__);  \
+                     	(unsigned)__LINE__, __FILE__);  \
                      exit(ROYAL_ASSERT_EXIT_CODE); \
                       }
+#else // !_MSC_VER
+#   define _Royal_assert(exp) if (!(exp) && fprintf(stderr, "FATAL: file:%s, line:%u\n", \
+                                       __FILE__, (unsigned)__LINE__) > 0) \
+                                      assert(exp)
+#endif // MSC_VER
                      
 #endif // ROYAL_MEM_H

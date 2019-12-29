@@ -3,6 +3,7 @@
 include_directories(${PROJECT_SOURCE_DIR}/include)
 
 set(ROYAL_CLIB_SOURCES
+   royal_graphs.c
    royal_ids.c
    royal_bytes.c
 )
