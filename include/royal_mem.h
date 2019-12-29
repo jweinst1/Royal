@@ -47,7 +47,7 @@ typedef unsigned __int64 uint64_t;
 
 #ifdef ROYAL_MEM_DEBUG
 #  define _Royal_realloc(new_ptr, old_ptr, new_size) \
-                     (new_ptr) = (realloc((old_ptr), (new_size)); \
+                     (new_ptr) = (realloc((old_ptr), (new_size))); \
                      printf("Royal DEBUG: size %lu (Realloc) %p -> %p\n", (unsigned long)new_size, old_ptr, new_ptr)
 #else // !ROYAL_MEM_DEBUG
 #  define _Royal_realloc(new_ptr, old_ptr, new_size) (new_ptr) = (realloc((old_ptr), (new_size)))

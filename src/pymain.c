@@ -11,6 +11,7 @@ typedef struct {
 static void
 RoyalGraph_dealloc(RoyalGraphObject *self)
 {
+    Royal_Graph_deinit(&(self->graph));
     Py_TYPE(self)->tp_free((PyObject *) self);
 }
 
@@ -20,40 +21,45 @@ RoyalGraph_new(PyTypeObject *type, PyObject *args, PyObject *kwds)
     RoyalGraphObject *self;
     self = (RoyalGraphObject *) type->tp_alloc(type, 0);
     if (self != NULL) {
-        self->graph->data = NULL;
-        self->graph->cap = 0;
-        self->graph->grow = 0;
-        self->graph->field = 0;
+        self->graph.data = NULL;
+        self->graph.cap = 0;
+        self->graph.grow = 0;
+        self->graph.field = 0;
     }
     return (PyObject *) self;
 }
 
 static int
-RoyalGraph_init(CustomObject *self, PyObject *args, PyObject *kwds)
+RoyalGraph_init(RoyalGraphObject *self, PyObject *args, PyObject *kwds)
 {
     static char *kwlist[] = {"field", "capacity", "growth", NULL};
     unsigned int field_size = 0;
-    unsigned int capacity = 0;
-    unsigned int growth = 0;
+    Py_ssize_t capacity = 0;
+    Py_ssize_t growth = 0;
+    size_t* capacity_p = NULL;
+    size_t* growth_p = NULL;
 
-    if (!PyArg_ParseTupleAndKeywords(args, kwds, "I|II", kwlist,
+    if (!PyArg_ParseTupleAndKeywords(args, kwds, "I|nn", kwlist,
                                      &field_size, &capacity,
                                      &growth))
         return -1;
 
-    if (capacity) {
-        tmp = self->first;
-        Py_INCREF(first);
-        self->first = first;
-        Py_XDECREF(tmp);
-    }
-    if (growth) {
-        tmp = self->last;
-        Py_INCREF(last);
-        self->last = last;
-        Py_XDECREF(tmp);
-    }
+    if (capacity)
+        capacity_p = &capacity;
+    if (growth)
+        growth_p = &growth;
+    Royal_Graph_init(&(self->graph), field_size, capacity_p, growth_p);
     return 0;
+}
+
+static PyObject *
+RoyalGraph_repr(RoyalGraphObject *self)
+{
+    if (self->graph.data == NULL) {
+        PyErr_SetString(PyExc_Exception, "RoyalGraph allocation failed");
+        return NULL;
+    }
+    return PyUnicode_FromFormat("(RoyalGraph -> field_size: %u)", self->graph.field);
 }
 
 static PyTypeObject RoyalGraphType = {
@@ -62,10 +68,11 @@ static PyTypeObject RoyalGraphType = {
     .tp_doc = "A container of graph connections",
     .tp_basicsize = sizeof(RoyalGraphObject),
     .tp_itemsize = 0,
-    .tp_flags = Py_TPFLAGS_DEFAULT,
+    .tp_flags = Py_TPFLAGS_DEFAULT | Py_TPFLAGS_BASETYPE,
     .tp_new = RoyalGraph_new,
     .tp_init = (initproc) RoyalGraph_init,
     .tp_dealloc = (destructor) RoyalGraph_dealloc,
+    .tp_repr = (reprfunc) RoyalGraph_repr,
 };
 
 static PyObject* print_message(PyObject* self, PyObject* args)

@@ -21,6 +21,8 @@ macro_defs = []
 if os.name == 'nt':
   macro_defs.append(('_CRT_SECURE_NO_WARNINGS', '1'))
 
+macro_defs.append(('ROYAL_MEM_DEBUG', '1'))
+
 module1 = Extension('royal',
                     define_macros = macro_defs,
                     include_dirs = ['include'],
