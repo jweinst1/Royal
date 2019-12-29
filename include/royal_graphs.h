@@ -24,7 +24,7 @@ typedef struct {
 
 #define ROYAL_GRAPH_GET(gr, at) (gr->data + (ROYAL_GRAPH_CSIZE(gr) * (at))) 
 
-void Royal_Graph_init(Royal_Graph* gr, unsigned int fsize, size_t* cap, size_t* grow_fac);
+int Royal_Graph_init(Royal_Graph* gr, unsigned int fsize, size_t* cap, size_t* grow_fac);
 
 void Royal_Graph_reserve(Royal_Graph* gr, size_t new_size);
 

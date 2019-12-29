@@ -48,7 +48,10 @@ RoyalGraph_init(RoyalGraphObject *self, PyObject *args, PyObject *kwds)
         capacity_p = &capacity;
     if (growth)
         growth_p = &growth;
-    Royal_Graph_init(&(self->graph), field_size, capacity_p, growth_p);
+    if(!Royal_Graph_init(&(self->graph), field_size, capacity_p, growth_p)) {
+        PyErr_SetString(PyExc_Exception, "RoyalGraph allocation failed");
+        return -1;
+    }
     return 0;
 }
 
@@ -62,6 +65,23 @@ RoyalGraph_repr(RoyalGraphObject *self)
     return PyUnicode_FromFormat("(RoyalGraph -> field_size: %u)", self->graph.field);
 }
 
+static PyObject *
+RoyalGraph_size(RoyalGraphObject *self, PyObject *Py_UNUSED(ignored))
+{
+    /*if (self->first == NULL) {
+        PyErr_SetString(PyExc_AttributeError, "first");
+        return NULL;
+    }*/
+    return PyLong_FromSize_t(self->graph.len);
+}
+
+static PyMethodDef RoyalGraph_methods[] = {
+    {"size", (PyCFunction) RoyalGraph_size, METH_NOARGS,
+     "Returns the amount of connections"
+    },
+    {NULL}  /* Sentinel */
+};
+
 static PyTypeObject RoyalGraphType = {
     PyVarObject_HEAD_INIT(NULL, 0)
     .tp_name = "royal.RoyalGraph",
@@ -73,6 +93,7 @@ static PyTypeObject RoyalGraphType = {
     .tp_init = (initproc) RoyalGraph_init,
     .tp_dealloc = (destructor) RoyalGraph_dealloc,
     .tp_repr = (reprfunc) RoyalGraph_repr,
+    .tp_methods = RoyalGraph_methods,
 };
 
 static PyObject* print_message(PyObject* self, PyObject* args)

@@ -13,7 +13,7 @@
                     _Royal_realloc(gr->data, gr->data, ROYAL_GRAPH_SIZE(gr))
 
 
-void Royal_Graph_init(Royal_Graph* gr, unsigned int fsize, size_t* cap, size_t* grow_fac)
+int Royal_Graph_init(Royal_Graph* gr, unsigned int fsize, size_t* cap, size_t* grow_fac)
 {
 	size_t capacity = cap == NULL ? ROYAL_GRAPH_DEFAULT_CAP : *cap;
 	size_t growth = grow_fac == NULL ? ROYAL_GRAPH_DEFAULT_GROW : *grow_fac;
@@ -25,6 +25,10 @@ void Royal_Graph_init(Royal_Graph* gr, unsigned int fsize, size_t* cap, size_t* 
 	gr->e_off = (fsize * 2) + 2;
 	gr->n_off = (fsize * 3) + 3;
 	_Royal_alloc(gr->data, ROYAL_GRAPH_SIZE(gr));
+	if(gr->data == NULL)
+		return 0;
+	else
+		return 1;
 }
 
 void Royal_Graph_reserve(Royal_Graph* gr, size_t new_size)
