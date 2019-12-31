@@ -23,8 +23,8 @@ static void test_royal_graph_append(void)
 	Royal_char* a1;
 	Royal_char* a2;
 	CHECK(Royal_Graph_init(&gr, 5, &capt, NULL));
-	a1 = Royal_Graph_append(&gr, "foo", "->", "bar");
-	a2 = Royal_Graph_append(&gr, "doo", "->", "bar");
+	a1 = Royal_Graph_append(&gr, "foo", "->", "bar", 0);
+	a2 = Royal_Graph_append(&gr, "doo", "->", "bar", 0);
 	CHECK(a1 != NULL && a2 != NULL);
 	CHECK(0 == strcmp(a1, "foo"));
 	CHECK(0 == strcmp(a2, "doo"));
@@ -39,9 +39,9 @@ static void test_royal_graph_str(void)
 	char* outs;
 	size_t capt = 10;
 	CHECK(Royal_Graph_init(&gr, 6, &capt, NULL));
-	CHECK(Royal_Graph_append(&gr, "a", "is", "c") != NULL);
-	CHECK(Royal_Graph_append(&gr, "a", "not", "b") != NULL);
-	CHECK(Royal_Graph_append(&gr, "c", "like", "b") != NULL);
+	CHECK(Royal_Graph_append(&gr, "a", "is", "c", 0) != NULL);
+	CHECK(Royal_Graph_append(&gr, "a", "not", "b", 0) != NULL);
+	CHECK(Royal_Graph_append(&gr, "c", "like", "b", 0) != NULL);
 	CHECK(Royal_Graph_str(&gr, &outs));
 	CHECK(outs != NULL);
 	CHECK(0 == strcmp(outs, TEST_OUTGR1));

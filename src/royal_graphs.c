@@ -44,9 +44,13 @@ void Royal_Graph_reserve(Royal_Graph* gr, size_t new_size)
 	_Royal_realloc(gr->data, gr->data, ROYAL_GRAPH_SIZE(gr));
 }
 
-Royal_char* Royal_Graph_append(Royal_Graph* gr, const char* e1, const char* v, const char* e2)
+Royal_char* Royal_Graph_append(Royal_Graph* gr, const char* e1, const char* v, const char* e2, int enforce)
 {
 	char* writable;
+	if (enforce) {
+		if (strlen(e1) > gr->field || strlen(v) > gr->field || strlen(e2) > gr->field)
+			return NULL;
+	}
 	if (gr->len == gr->cap) {
 		ROYAL_GRAPH_GROW(gr);
 	}
