@@ -29,6 +29,8 @@ int Royal_Graph_init(Royal_Graph* gr, unsigned int fsize, size_t* cap, size_t* g
 
 void Royal_Graph_reserve(Royal_Graph* gr, size_t new_size);
 
+int Royal_Graph_trim(Royal_Graph* gr, size_t to_trim);
+
 Royal_char* Royal_Graph_append(Royal_Graph* gr, const char* e1, const char* v, const char* e2, int enforce);
 /**
  * Accepts a string in the form "a/is/b,a/likes/c" ... to input into the graph.

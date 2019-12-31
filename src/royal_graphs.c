@@ -44,6 +44,14 @@ void Royal_Graph_reserve(Royal_Graph* gr, size_t new_size)
 	_Royal_realloc(gr->data, gr->data, ROYAL_GRAPH_SIZE(gr));
 }
 
+int Royal_Graph_trim(Royal_Graph* gr, size_t to_trim)
+{
+	if (to_trim > gr->len)
+		return 0;
+	gr->len -= to_trim;
+	return 1;
+}
+
 Royal_char* Royal_Graph_append(Royal_Graph* gr, const char* e1, const char* v, const char* e2, int enforce)
 {
 	char* writable;
@@ -112,6 +120,7 @@ int Royal_Graph_str(const Royal_Graph* gr, char** output)
 			counter = gr->field;
 			continue;
 		}
+		// Never write \0 chars into output string
 		--counter;
 		if(*reader)
 			*writer++ = *reader++;

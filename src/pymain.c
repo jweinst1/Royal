@@ -74,7 +74,7 @@ RoyalGraph_repr(RoyalGraphObject *self)
         printed = PyUnicode_FromString("/0/"); // the empty graph
     } else {
         printed = PyUnicode_FromString(bufptr);
-        free(bufptr);
+        _Royal_free(bufptr);
     }
     return printed;
 }
@@ -105,12 +105,33 @@ RoyalGraph_append(RoyalGraphObject *self, PyObject *args, PyObject *kwargs)
     return Py_None;
 }
 
+
+static PyObject*
+RoyalGraph_trim(RoyalGraphObject *self, PyObject *args, PyObject *kwargs)
+{
+    static char *kwlist[] = {"count", NULL};
+    Py_ssize_t amount = 0;
+    if(!PyArg_ParseTupleAndKeywords(args, kwargs, "n", kwlist,
+                                    &amount)) {
+        return NULL;
+    }
+    if(!Royal_Graph_trim(&(self->graph), amount)) {
+        PyErr_Format(PyExc_Exception, "Cannot trim more than %zu connections", self->graph.len);
+        return NULL;
+    }
+    Py_INCREF(Py_None);
+    return Py_None;
+}
+
 static PyMethodDef RoyalGraph_methods[] = {
     {"size", (PyCFunction) RoyalGraph_size, METH_NOARGS,
      "Returns the amount of connections"
     },
     {"append", (PyCFunction) RoyalGraph_append, METH_VARARGS | METH_KEYWORDS,
     "Adds a connection to the graph"
+    },
+    {"trim", (PyCFunction) RoyalGraph_trim, METH_VARARGS | METH_KEYWORDS,
+    "Erases connections from the end of the graph"
     },
     {NULL}  /* Sentinel */
 };
