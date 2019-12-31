@@ -58,11 +58,25 @@ RoyalGraph_init(RoyalGraphObject *self, PyObject *args, PyObject *kwds)
 static PyObject *
 RoyalGraph_repr(RoyalGraphObject *self)
 {
+    char* bufptr;
+    PyObject* printed;
+    int print_res;
     if (self->graph.data == NULL) {
         PyErr_SetString(PyExc_Exception, "RoyalGraph allocation failed");
         return NULL;
     }
-    return PyUnicode_FromFormat("(RoyalGraph -> field_size: %u)", self->graph.field);
+    print_res = Royal_Graph_str(&(self->graph), &bufptr);
+    if (!print_res) {
+        PyErr_SetString(PyExc_Exception, "RoyalGraph representation failed");
+        return NULL;
+    }
+    else if (print_res == -1) {
+        printed = PyUnicode_FromString("/0/"); // the empty graph
+    } else {
+        printed = PyUnicode_FromString(bufptr);
+        free(bufptr);
+    }
+    return printed;
 }
 
 static PyObject *

@@ -16,6 +16,21 @@ static void test_royal_graph_init(void)
 	Royal_Graph_deinit(&gr);
 }
 
+static void test_royal_graph_append(void)
+{
+	Royal_Graph gr;
+	size_t capt = 5;
+	Royal_char* a1;
+	Royal_char* a2;
+	CHECK(Royal_Graph_init(&gr, 5, &capt, NULL));
+	a1 = Royal_Graph_append(&gr, "foo", "->", "bar");
+	a2 = Royal_Graph_append(&gr, "doo", "->", "bar");
+	CHECK(a1 != NULL && a2 != NULL);
+	CHECK(0 == strcmp(a1, "foo"));
+	CHECK(0 == strcmp(a2, "doo"));
+	Royal_Graph_deinit(&gr);
+}
+
 static const char* TEST_OUTGR1 = "a/is/c\na/not/b\nc/like/b\n";
 
 static void test_royal_graph_str(void)
@@ -39,6 +54,7 @@ int main(int argc, char const *argv[])
 {
 	test_royal_graph_init();
 	test_royal_graph_str();
+	test_royal_graph_append();
 	RETURN_FAILURES
 }
 
