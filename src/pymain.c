@@ -68,10 +68,6 @@ RoyalGraph_repr(RoyalGraphObject *self)
 static PyObject *
 RoyalGraph_size(RoyalGraphObject *self, PyObject *Py_UNUSED(ignored))
 {
-    /*if (self->first == NULL) {
-        PyErr_SetString(PyExc_AttributeError, "first");
-        return NULL;
-    }*/
     return PyLong_FromSize_t(self->graph.len);
 }
 
