@@ -85,9 +85,32 @@ RoyalGraph_size(RoyalGraphObject *self, PyObject *Py_UNUSED(ignored))
     return PyLong_FromSize_t(self->graph.len);
 }
 
+static PyObject*
+RoyalGraph_append(RoyalGraphObject *self, PyObject *args, PyObject *kwargs)
+{
+    static char *kwlist[] = {"edge1", "vert", "edge2", "enforce",  NULL};
+    const char* edge1;
+    const char* vert;
+    const char* edge2;
+    int enforce = 0;
+    if(!PyArg_ParseTupleAndKeywords(args, kwargs, "sss|p", kwlist,
+                                    &edge1, &vert, &edge2, &enforce)) {
+        return NULL;
+    }
+    if(NULL == Royal_Graph_append(&(self->graph), edge1, vert, edge2, enforce)) {
+        PyErr_SetString(PyExc_Exception, "The size of an element exceeds the field size");
+        return NULL;
+    }
+    Py_INCREF(Py_None);
+    return Py_None;
+}
+
 static PyMethodDef RoyalGraph_methods[] = {
     {"size", (PyCFunction) RoyalGraph_size, METH_NOARGS,
      "Returns the amount of connections"
+    },
+    {"append", (PyCFunction) RoyalGraph_append, METH_VARARGS | METH_KEYWORDS,
+    "Adds a connection to the graph"
     },
     {NULL}  /* Sentinel */
 };
