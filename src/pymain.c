@@ -7,6 +7,10 @@ typedef struct {
     PyObject_HEAD
     Royal_Graph graph;
 } RoyalGraphObject;
+/**
+ * Allows custom C functions to create new graphs without invoking new or init.
+ */
+extern PyTypeObject RoyalGraphType;
 
 static void
 RoyalGraph_dealloc(RoyalGraphObject *self)
@@ -123,15 +127,37 @@ RoyalGraph_trim(RoyalGraphObject *self, PyObject *args, PyObject *kwargs)
     return Py_None;
 }
 
+static PyObject*
+RoyalGraph_copy(RoyalGraphObject* self, PyObject *args, PyObject *kwargs)
+{
+    RoyalGraphObject *copied;
+    copied = (RoyalGraphObject *) RoyalGraphType.tp_alloc(&RoyalGraphType, 0);
+    if (copied == NULL) {
+        PyErr_SetString(PyExc_Exception, "RoyalGraph copy failed");
+        return NULL;
+    }
+
+    if (!Royal_Graph_copy(&(copied->graph), &(self->graph))) {
+        PyErr_SetString(PyExc_Exception, "RoyalGraph copy attempted on NULL graph");
+        RoyalGraph_dealloc(copied);
+        return NULL;
+    }
+
+    return (PyObject *) copied;
+}
+
 static PyMethodDef RoyalGraph_methods[] = {
     {"size", (PyCFunction) RoyalGraph_size, METH_NOARGS,
      "Returns the amount of connections"
     },
     {"append", (PyCFunction) RoyalGraph_append, METH_VARARGS | METH_KEYWORDS,
-    "Adds a connection to the graph"
+    "Adds a connection to the end of the graph"
     },
     {"trim", (PyCFunction) RoyalGraph_trim, METH_VARARGS | METH_KEYWORDS,
     "Erases connections from the end of the graph"
+    },
+    {"copy", (PyCFunction) RoyalGraph_copy, METH_VARARGS | METH_KEYWORDS,
+    "Creates a full copy of the graph"
     },
     {NULL}  /* Sentinel */
 };

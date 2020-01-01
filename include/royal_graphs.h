@@ -39,6 +39,8 @@ int Royal_Graph_add(Royal_Graph* gr, const char* input, int enforce_fsize);
 
 int Royal_Graph_str(const Royal_Graph* gr, char** output);
 
+int Royal_Graph_copy(Royal_Graph* dst, const Royal_Graph* src);
+
 void Royal_Graph_deinit(Royal_Graph* gr);
 
 #endif // ROYAL_GRAPHS_H

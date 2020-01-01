@@ -131,6 +131,22 @@ int Royal_Graph_str(const Royal_Graph* gr, char** output)
 	return 1;
 }
 
+int Royal_Graph_copy(Royal_Graph* dst, const Royal_Graph* src)
+{
+	if(dst->data != NULL)
+		return 0;
+	dst->len = src->len;
+	dst->cap = src->cap;
+	dst->v_off = src->v_off;
+	dst->grow = src->grow;
+	dst->field = src->field;
+	dst->e_off = src->e_off;
+	dst->n_off = src->n_off;
+	_Royal_alloc(dst->data, ROYAL_GRAPH_SIZE(src));
+	memcpy(dst->data, src->data, ROYAL_GRAPH_SIZE(src));
+	return 1;
+}
+
 void Royal_Graph_deinit(Royal_Graph* gr)
 {
 	_Royal_free(gr->data);
