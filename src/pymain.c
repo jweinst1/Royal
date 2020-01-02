@@ -130,19 +130,31 @@ RoyalGraph_trim(RoyalGraphObject *self, PyObject *args, PyObject *kwargs)
 static PyObject*
 RoyalGraph_copy(RoyalGraphObject* self, PyObject *args, PyObject *kwargs)
 {
+    int result;
     RoyalGraphObject *copied;
+    // to do add up_to support
+    static char *kwlist[] = {"up_to", NULL};
+    Py_ssize_t up_to = 0;
+    if (!PyArg_ParseTupleAndKeywords(args, kwargs, "|n", kwlist, &up_to))
+        return NULL;
+                  
     copied = (RoyalGraphObject *) RoyalGraphType.tp_alloc(&RoyalGraphType, 0);
     if (copied == NULL) {
         PyErr_SetString(PyExc_Exception, "RoyalGraph copy failed");
         return NULL;
     }
-
-    if (!Royal_Graph_copy(&(copied->graph), &(self->graph))) {
+    result = Royal_Graph_copy(&(copied->graph), &(self->graph), up_to);
+    if (!result) {
         PyErr_SetString(PyExc_Exception, "RoyalGraph copy attempted on NULL graph");
         RoyalGraph_dealloc(copied);
         return NULL;
     }
 
+    if (result == -1) {
+        PyErr_SetString(PyExc_Exception, "'upto' must be less than or equal to the graph size.");
+        RoyalGraph_dealloc(copied);
+        return NULL;
+    }
     return (PyObject *) copied;
 }
 
@@ -192,7 +204,9 @@ static PyObject* print_message(PyObject* self, PyObject* args)
     Py_INCREF(Py_None);
     return Py_None;
 }
-
+/**
+ * These are tool-util functions packaged with Royal
+ */
 static PyMethodDef myMethods[] = {
     { "print_message", print_message, METH_VARARGS, "Prints a called string" },
     { NULL, NULL, 0, NULL }

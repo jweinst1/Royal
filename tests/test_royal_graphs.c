@@ -50,12 +50,29 @@ static void test_royal_graph_str(void)
 	free(outs);
 }
 
+static void test_royal_graph_get(void)
+{
+	Royal_Graph gr;
+	const char* e1 = NULL;
+	const char* v = NULL;
+	const char* e2 = NULL;
+	CHECK(Royal_Graph_init(&gr, 5, NULL, NULL));
+	CHECK(Royal_Graph_append(&gr, "a", "to", "c", 0) != NULL);
+	CHECK(Royal_Graph_append(&gr, "a", "to", "b", 0) != NULL);
+	CHECK(Royal_Graph_append(&gr, "b", "to", "c", 0) != NULL);
+	CHECK(1 == Royal_Graph_get(&gr, 1, &e1, &v, &e2));
+	CHECK(e1 != NULL && 0 == strcmp(e1, "a"));
+	CHECK(v != NULL && 0 == strcmp(v, "to"));
+	CHECK(e2 != NULL && 0 == strcmp(e2, "b"));
+	Royal_Graph_deinit(&gr);
+}
+
 int main(int argc, char const *argv[])
 {
 	test_royal_graph_init();
 	test_royal_graph_str();
 	test_royal_graph_append();
+	test_royal_graph_get();
 	RETURN_FAILURES
 }
 
-#undef _CLEAN_TEST_OUTBUF

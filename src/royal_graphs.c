@@ -131,11 +131,13 @@ int Royal_Graph_str(const Royal_Graph* gr, char** output)
 	return 1;
 }
 
-int Royal_Graph_copy(Royal_Graph* dst, const Royal_Graph* src)
+int Royal_Graph_copy(Royal_Graph* dst, const Royal_Graph* src, size_t up_to)
 {
-	if(dst->data != NULL)
+	if (dst->data != NULL)
 		return 0;
-	dst->len = src->len;
+	if (up_to && up_to > src->len)
+		return -1;
+	dst->len = up_to ? up_to : src->len;
 	dst->cap = src->cap;
 	dst->v_off = src->v_off;
 	dst->grow = src->grow;
@@ -143,7 +145,22 @@ int Royal_Graph_copy(Royal_Graph* dst, const Royal_Graph* src)
 	dst->e_off = src->e_off;
 	dst->n_off = src->n_off;
 	_Royal_alloc(dst->data, ROYAL_GRAPH_SIZE(src));
-	memcpy(dst->data, src->data, ROYAL_GRAPH_SIZE(src));
+	memcpy(dst->data, src->data, up_to ? ROYAL_GRAPH_NSIZE(src, up_to) : ROYAL_GRAPH_SIZE(src));
+	return 1;
+}
+
+int Royal_Graph_get(const Royal_Graph* gr,
+	                size_t index,
+	                const char** e1,
+	                const char** v, 
+	                const char** e2)
+{
+	if (index >= gr->len)
+		return 0;
+	Royal_char* conn = ROYAL_GRAPH_GET(gr, index);
+	*e1 = conn;
+	*v = conn + gr->v_off;
+	*e2 = conn + gr->e_off;
 	return 1;
 }
 

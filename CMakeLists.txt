@@ -1,6 +1,13 @@
 cmake_minimum_required(VERSION 3.1)
 
-project(royal VERSION 0.0.2)
+project(royal)
+
+# This sets the package specific versioning
+set(ROYAL_MAJOR_VERSION 0)
+set(ROYAL_MINOR_VERSION 0)
+set(ROYAL_PATCH_VERSION 2)
+
+message("-- Building royal version: ${ROYAL_MAJOR_VERSION}.${ROYAL_MINOR_VERSION}.${ROYAL_PATCH_VERSION}")
 
 # Option to install targets to env location
 if(DEFINED ENV{ROYAL_HOME})
@@ -37,4 +44,3 @@ add_subdirectory(src)
 if(WITH_testing MATCHES ON)
    add_subdirectory(tests)
 endif(WITH_testing MATCHES ON)
-
