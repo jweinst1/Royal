@@ -1,5 +1,6 @@
 from distutils.core import setup, Extension
 import os
+import sys
 
 keyword_list = [
     'graphs',
@@ -21,7 +22,11 @@ macro_defs = []
 if os.name == 'nt':
   macro_defs.append(('_CRT_SECURE_NO_WARNINGS', '1'))
 
-macro_defs.append(('ROYAL_MEM_DEBUG', '1'))
+# For development or debugging purposes only, can be used by doing
+# $ python setup.py build --mem-debug
+if '--mem-debug' in sys.argv[1:]:
+  macro_defs.append(('ROYAL_MEM_DEBUG', '1'))
+  sys.argv.remove('--mem-debug')
 
 # Version definition
 macro_defs.append(('ROYAL_VERSION', '1'))
