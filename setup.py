@@ -23,13 +23,19 @@ if os.name == 'nt':
 
 macro_defs.append(('ROYAL_MEM_DEBUG', '1'))
 
+# Version definition
+macro_defs.append(('ROYAL_VERSION', '1'))
+macro_defs.append(('ROYAL_MAJOR_VERSION', '0'))
+macro_defs.append(('ROYAL_MINOR_VERSION', '0'))
+macro_defs.append(('ROYAL_PATCH_VERSION', '3'))
+
 module1 = Extension('royal',
                     define_macros = macro_defs,
                     include_dirs = ['include'],
                     sources = ['src/pymain.c', 'src/royal_graphs.c'])
 
 setup (name = 'royal',
-       version = '0.0.2',
+       version = '0.0.3',
        description = 'A graph data format library',
        author = 'Joshua Weinstein',
        author_email = 'jweinst1@berkeley.edu',

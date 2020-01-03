@@ -265,27 +265,20 @@ static PyTypeObject RoyalGraphType = {
     .tp_methods = RoyalGraph_methods,
 };
 
-static PyObject* print_message(PyObject* self, PyObject* args)
+static PyObject* royal_version(PyObject* self, PyObject *Py_UNUSED(ignored))
 {
-    const char* str_arg;
-    if(!PyArg_ParseTuple(args, "s", &str_arg)) {
-        puts("Could not parse the python arg!");
-        return NULL;
-    }
-#ifdef USE_PRINTER
-    printf("royal %s\n", str_arg);
+#ifdef ROYAL_VERSION
+    return Py_BuildValue("III", ROYAL_MAJOR_VERSION, ROYAL_MINOR_VERSION, ROYAL_PATCH_VERSION);
 #else
-    printf("royal %s\n", str_arg);
-#endif
-    // This can also be done with Py_RETURN_NONE
     Py_INCREF(Py_None);
     return Py_None;
+#endif
 }
 /**
  * These are tool-util functions packaged with Royal
  */
 static PyMethodDef myMethods[] = {
-    { "print_message", print_message, METH_VARARGS, "Prints a called string" },
+    { "version", royal_version, METH_NOARGS, "Returns a tuple representing the version of royal" },
     { NULL, NULL, 0, NULL }
 };
 
