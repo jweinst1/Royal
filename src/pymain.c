@@ -92,7 +92,7 @@ RoyalGraph_size(RoyalGraphObject *self, PyObject *Py_UNUSED(ignored))
 static PyObject*
 RoyalGraph_append(RoyalGraphObject *self, PyObject *args, PyObject *kwargs)
 {
-    static char *kwlist[] = {"edge1", "vert", "edge2", "enforce",  NULL};
+    static char *kwlist[] = {"el", "v", "er", "enforce",  NULL};
     const char* edge1;
     const char* vert;
     const char* edge2;
@@ -158,6 +158,47 @@ RoyalGraph_copy(RoyalGraphObject* self, PyObject *args, PyObject *kwargs)
     return (PyObject *) copied;
 }
 
+static PyObject*
+RoyalGraph_get(RoyalGraphObject *self, PyObject *args, PyObject *kwargs)
+{
+    static char *kwlist[] = {"at", NULL};
+    Py_ssize_t index = 0;
+    const char* edge1 = NULL;
+    const char* vert = NULL;
+    const char* edge2 = NULL;
+    if(!PyArg_ParseTupleAndKeywords(args, kwargs, "n", kwlist,
+                                    &index)) {
+        return NULL;
+    }
+    if(!Royal_Graph_get(&(self->graph), index, &edge1, &vert, &edge2)) {
+        PyErr_Format(PyExc_Exception, "Index '%zi' is out of range", index);
+        return NULL;
+    }
+
+    return Py_BuildValue("sss", edge1, vert, edge2);
+}
+
+static PyObject*
+RoyalGraph_count(RoyalGraphObject *self, PyObject *args, PyObject *kwargs)
+{
+    static char *kwlist[] = {"el", "v", "er", NULL};
+    const char* edge1 = NULL;
+    const char* vert = NULL;
+    const char* edge2 = NULL;
+    long counted = 0;
+    if(!PyArg_ParseTupleAndKeywords(args, kwargs, "|sss", kwlist,
+                                    &edge1, &vert, &edge2)) {
+        return NULL;
+    }
+    counted = Royal_Graph_count(&(self->graph), edge1, vert, edge2);
+    if(counted == -1) {
+        PyErr_SetString(PyExc_Exception, "RoyalGraph count attempted on NULL graph");
+        return NULL;
+    }
+    
+    return PyLong_FromLong(counted);
+}
+
 static PyMethodDef RoyalGraph_methods[] = {
     {"size", (PyCFunction) RoyalGraph_size, METH_NOARGS,
      "Returns the amount of connections"
@@ -170,6 +211,12 @@ static PyMethodDef RoyalGraph_methods[] = {
     },
     {"copy", (PyCFunction) RoyalGraph_copy, METH_VARARGS | METH_KEYWORDS,
     "Creates a full copy of the graph"
+    },
+    {"get", (PyCFunction) RoyalGraph_get, METH_VARARGS | METH_KEYWORDS,
+    "Returns the ith connection in the graph"
+    },
+    {"count", (PyCFunction) RoyalGraph_count, METH_VARARGS | METH_KEYWORDS,
+    "Counts the connections with match the criteria"
     },
     {NULL}  /* Sentinel */
 };

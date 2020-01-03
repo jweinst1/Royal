@@ -1,4 +1,5 @@
 #include "royal_graphs.h"
+#include <limits.h>
 
 #ifndef ROYAL_GRAPH_DEFAULT_CAP
 #define ROYAL_GRAPH_DEFAULT_CAP 15
@@ -11,6 +12,8 @@
 #define ROYAL_GRAPH_GROW(gr) \
                     gr->cap *= gr->grow; \
                     _Royal_realloc(gr->data, gr->data, ROYAL_GRAPH_SIZE(gr))
+
+
 
 typedef enum {
 	ROYAL_GRAPH_SEP_VS,
@@ -68,12 +71,6 @@ Royal_char* Royal_Graph_append(Royal_Graph* gr, const char* e1, const char* v, c
 	strncpy(writable + gr->v_off, v, gr->field);
 	strncpy(writable + gr->e_off, e2, gr->field);
 	return writable;
-}
-
-int Royal_Graph_add(Royal_Graph* gr, const char* input, int enforce_fsize)
-{
-	// Not implemented yet.
-	return 1;
 }
 
 int Royal_Graph_str(const Royal_Graph* gr, char** output)
@@ -163,6 +160,31 @@ int Royal_Graph_get(const Royal_Graph* gr,
 	*e2 = conn + gr->e_off;
 	return 1;
 }
+
+long Royal_Graph_count(const Royal_Graph* gr,
+	                            const char* e1, 
+	                            const char* v,
+	                            const char* e2)
+{
+	long total = 0;
+	if(gr->data == NULL)
+		return -1;
+	Royal_char* reader = gr->data;
+	const Royal_char* read_end = reader + ROYAL_GRAPH_LSIZE(gr);
+	while (reader != read_end) {
+		if(e1 != NULL && 0 != strcmp(e1, reader))
+			goto NEXT_CONN;
+		if(v != NULL && 0 != strcmp(v, reader + gr->v_off))
+			goto NEXT_CONN;
+		if(e2 != NULL && 0 != strcmp(e2, reader + gr->e_off))
+			goto NEXT_CONN;
+		++total;
+NEXT_CONN:
+       reader += gr->n_off;
+	}
+	return total;
+}
+
 
 void Royal_Graph_deinit(Royal_Graph* gr)
 {

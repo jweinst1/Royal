@@ -33,10 +33,6 @@ void Royal_Graph_reserve(Royal_Graph* gr, size_t new_size);
 int Royal_Graph_trim(Royal_Graph* gr, size_t to_trim);
 
 Royal_char* Royal_Graph_append(Royal_Graph* gr, const char* e1, const char* v, const char* e2, int enforce);
-/**
- * Accepts a string in the form "a/is/b,a/likes/c" ... to input into the graph.
- */
-int Royal_Graph_add(Royal_Graph* gr, const char* input, int enforce_fsize);
 
 int Royal_Graph_str(const Royal_Graph* gr, char** output);
 
@@ -47,6 +43,12 @@ int Royal_Graph_get(const Royal_Graph* gr,
 	                const char** e1,
 	                const char** v, 
 	                const char** e2);
+
+long Royal_Graph_count(const Royal_Graph* gr,
+	                            const char* e1, 
+	                            const char* v,
+	                            const char* e2);
+
 
 void Royal_Graph_deinit(Royal_Graph* gr);
 

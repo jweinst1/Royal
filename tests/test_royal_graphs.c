@@ -67,12 +67,27 @@ static void test_royal_graph_get(void)
 	Royal_Graph_deinit(&gr);
 }
 
+static void test_royal_graph_count(void)
+{
+	Royal_Graph gr;
+	CHECK(Royal_Graph_init(&gr, 10, NULL, NULL));
+	CHECK(Royal_Graph_append(&gr, "a", "to", "c", 0) != NULL);
+	CHECK(Royal_Graph_append(&gr, "a", "to", "b", 0) != NULL);
+	CHECK(Royal_Graph_append(&gr, "b", "to", "c", 0) != NULL);
+	CHECK(Royal_Graph_append(&gr, "f", "to", "c", 0) != NULL);
+	CHECK(Royal_Graph_append(&gr, "e", "to", "b", 0) != NULL);
+	CHECK(Royal_Graph_append(&gr, "b", "not", "c", 0) != NULL);
+	CHECK(5 == Royal_Graph_count(&gr, NULL, "to", NULL));
+	Royal_Graph_deinit(&gr);
+}
+
 int main(int argc, char const *argv[])
 {
 	test_royal_graph_init();
 	test_royal_graph_str();
 	test_royal_graph_append();
 	test_royal_graph_get();
+	test_royal_graph_count();
 	RETURN_FAILURES
 }
 
