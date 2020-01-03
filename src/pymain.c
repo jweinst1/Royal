@@ -179,6 +179,33 @@ RoyalGraph_get(RoyalGraphObject *self, PyObject *args, PyObject *kwargs)
 }
 
 static PyObject*
+RoyalGraph_tuple(RoyalGraphObject *self,  PyObject *Py_UNUSED(ignored))
+{
+    PyObject* tuped; 
+    Py_ssize_t index = self->graph.len - 1;
+    const char* edge1 = NULL;
+    const char* vert = NULL;
+    const char* edge2 = NULL;
+
+    tuped = PyTuple_New(self->graph.len);
+    if(tuped == NULL) {
+        return PyErr_NoMemory();
+    }
+    do {
+        PyObject* row;
+        Royal_Graph_get(&(self->graph), index, &edge1, &vert, &edge2);
+        row = Py_BuildValue("sss", edge1, vert, edge2);
+        if (row == NULL) {
+            Py_XDECREF(tuped);
+            return PyErr_NoMemory();
+        }
+        PyTuple_SET_ITEM(tuped, index, row);
+    } while (index--);
+
+    return tuped;
+}
+
+static PyObject*
 RoyalGraph_count(RoyalGraphObject *self, PyObject *args, PyObject *kwargs)
 {
     static char *kwlist[] = {"el", "v", "er", NULL};
@@ -217,6 +244,9 @@ static PyMethodDef RoyalGraph_methods[] = {
     },
     {"count", (PyCFunction) RoyalGraph_count, METH_VARARGS | METH_KEYWORDS,
     "Counts the connections with match the criteria"
+    },
+    {"tuple", (PyCFunction) RoyalGraph_tuple, METH_NOARGS,
+    "Returns a tuple representation of the graph"
     },
     {NULL}  /* Sentinel */
 };
