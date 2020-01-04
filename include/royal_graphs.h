@@ -49,6 +49,12 @@ long Royal_Graph_count(const Royal_Graph* gr,
 	                            const char* v,
 	                            const char* e2);
 
+int Royal_Graph_match(const Royal_Graph* gr,
+	                        Royal_Graph* output,
+	                            const char* e1, 
+	                            const char* v,
+	                            const char* e2);
+
 
 void Royal_Graph_deinit(Royal_Graph* gr);
 

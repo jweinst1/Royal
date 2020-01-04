@@ -185,6 +185,43 @@ NEXT_CONN:
 	return total;
 }
 
+int Royal_Graph_match(const Royal_Graph* gr,
+	                        Royal_Graph* output,
+	                            const char* e1, 
+	                            const char* v,
+	                            const char* e2)
+{
+	Royal_char* reader = gr->data;
+	const Royal_char* read_end = reader + ROYAL_GRAPH_LSIZE(gr);
+	size_t outcap = gr->cap;
+	size_t outgrow = gr->grow;
+	if (gr->data == NULL)
+		return 0;
+	if (output->data == NULL) {
+		if (!Royal_Graph_init(output, gr->field, &outcap, &outcap))
+			return 0;
+	} else {
+		(void) outcap;
+		(void) outgrow;
+	}
+	while(reader != read_end) {
+		if (e1 != NULL && 0 != strcmp(e1, reader))
+			goto NEXT_CONN;
+		if (v != NULL && 0 != strcmp(v, reader + gr->v_off))
+			goto NEXT_CONN;
+		if (e2 != NULL && 0 != strcmp(e2, reader + gr->e_off))
+			goto NEXT_CONN;
+		if (output->len == output->cap) {
+			ROYAL_GRAPH_GROW(output);
+		}
+		memcpy(output->data + ROYAL_GRAPH_LSIZE(output), reader, output->n_off);
+		++(output->len);
+NEXT_CONN:
+         reader += gr->n_off;
+	}
+	return 1;
+}
+
 
 void Royal_Graph_deinit(Royal_Graph* gr)
 {

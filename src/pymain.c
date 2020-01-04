@@ -226,6 +226,35 @@ RoyalGraph_count(RoyalGraphObject *self, PyObject *args, PyObject *kwargs)
     return PyLong_FromLong(counted);
 }
 
+static PyObject*
+RoyalGraph_match(RoyalGraphObject* self, PyObject *args, PyObject *kwargs)
+{
+    int result;
+    RoyalGraphObject *matched;
+    // to do add up_to support
+    static char *kwlist[] = {"el", "v", "er", NULL};
+    const char* edge1 = NULL;
+    const char* vert = NULL;
+    const char* edge2 = NULL;
+    if (!PyArg_ParseTupleAndKeywords(args, kwargs, "|sss", kwlist, &edge1,
+                                      &vert, &edge2))
+        return NULL;
+                  
+    matched = (RoyalGraphObject *) RoyalGraphType.tp_alloc(&RoyalGraphType, 0);
+    if (matched == NULL) {
+        PyErr_SetString(PyExc_Exception, "RoyalGraph match failed due to bad allocation");
+        return NULL;
+    }
+    matched->graph.data = NULL;
+    result = Royal_Graph_match(&(self->graph), &(matched->graph), edge1, vert, edge2);
+    if (!result) {
+        PyErr_SetString(PyExc_Exception, "RoyalGraph match attempted on NULL graph");
+        RoyalGraph_dealloc(matched);
+        return NULL;
+    }
+    return (PyObject *) matched;
+}
+
 static PyMethodDef RoyalGraph_methods[] = {
     {"size", (PyCFunction) RoyalGraph_size, METH_NOARGS,
      "Returns the amount of connections"
@@ -247,6 +276,9 @@ static PyMethodDef RoyalGraph_methods[] = {
     },
     {"tuple", (PyCFunction) RoyalGraph_tuple, METH_NOARGS,
     "Returns a tuple representation of the graph"
+    },
+    {"match", (PyCFunction) RoyalGraph_match, METH_VARARGS | METH_KEYWORDS,
+    "Returns a new graph with connections that match the criteria"
     },
     {NULL}  /* Sentinel */
 };

@@ -81,6 +81,29 @@ static void test_royal_graph_count(void)
 	Royal_Graph_deinit(&gr);
 }
 
+static void test_royal_graph_match(void)
+{
+	Royal_Graph gr;
+	Royal_Graph matched;
+	// must be NULL to allow init
+	matched.data = NULL;
+	CHECK(Royal_Graph_init(&gr, 10, NULL, NULL));
+	CHECK(Royal_Graph_append(&gr, "a", "to", "c", 0) != NULL);
+	CHECK(Royal_Graph_append(&gr, "a", "to", "b", 0) != NULL);
+	CHECK(Royal_Graph_append(&gr, "b", "to", "c", 0) != NULL);
+	CHECK(Royal_Graph_append(&gr, "f", "to", "c", 0) != NULL);
+	CHECK(Royal_Graph_append(&gr, "e", "to", "b", 0) != NULL);
+	CHECK(Royal_Graph_append(&gr, "b", "not", "c", 0) != NULL);
+	CHECK(Royal_Graph_match(&gr, &matched, NULL, "to", NULL));
+	CHECK(matched.data != NULL);
+	CHECK(matched.len == 5);
+	CHECK(matched.field == gr.field);
+	// compare first field
+	CHECK(0 == strcmp(matched.data, gr.data));
+	Royal_Graph_deinit(&gr);
+	Royal_Graph_deinit(&matched);
+}
+
 int main(int argc, char const *argv[])
 {
 	test_royal_graph_init();
@@ -88,6 +111,7 @@ int main(int argc, char const *argv[])
 	test_royal_graph_append();
 	test_royal_graph_get();
 	test_royal_graph_count();
+	test_royal_graph_match();
 	RETURN_FAILURES
 }
 
