@@ -42,7 +42,7 @@ static void test_royal_graph_str(void)
 	CHECK(Royal_Graph_append(&gr, "a", "is", "c", 0) != NULL);
 	CHECK(Royal_Graph_append(&gr, "a", "not", "b", 0) != NULL);
 	CHECK(Royal_Graph_append(&gr, "c", "like", "b", 0) != NULL);
-	CHECK(Royal_Graph_str(&gr, &outs));
+	CHECK(Royal_Graph_str(&gr, &outs, '/', '\n'));
 	CHECK(outs != NULL);
 	CHECK(0 == strcmp(outs, TEST_OUTGR1));
 	printf("content of outs: %s", outs);

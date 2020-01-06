@@ -69,7 +69,7 @@ RoyalGraph_repr(RoyalGraphObject *self)
         PyErr_SetString(PyExc_Exception, "RoyalGraph allocation failed");
         return NULL;
     }
-    print_res = Royal_Graph_str(&(self->graph), &bufptr);
+    print_res = Royal_Graph_str(&(self->graph), &bufptr, '/', '\n');
     if (!print_res) {
         PyErr_SetString(PyExc_Exception, "RoyalGraph representation failed");
         return NULL;
@@ -255,6 +255,35 @@ RoyalGraph_match(RoyalGraphObject* self, PyObject *args, PyObject *kwargs)
     return (PyObject *) matched;
 }
 
+static PyObject *
+RoyalGraph_str(RoyalGraphObject *self, PyObject *args, PyObject *kwargs)
+{
+    char* bufptr;
+    PyObject* printed;
+    int print_res;
+    static char *kwlist[] = {"split", "sep", NULL};
+    int splitch = '/';
+    int sepch = '\n';
+    if (!PyArg_ParseTupleAndKeywords(args, kwargs, "|CC", kwlist, &splitch, &sepch))
+        return NULL;
+    if (self->graph.data == NULL) {
+        PyErr_SetString(PyExc_Exception, "RoyalGraph allocation failed");
+        return NULL;
+    }
+    print_res = Royal_Graph_str(&(self->graph), &bufptr, splitch, sepch);
+    if (!print_res) {
+        PyErr_SetString(PyExc_Exception, "RoyalGraph representation failed");
+        return NULL;
+    }
+    else if (print_res == -1) {
+        printed = PyUnicode_FromString("/0/"); // the empty graph
+    } else {
+        printed = PyUnicode_FromString(bufptr);
+        _Royal_free(bufptr);
+    }
+    return printed;
+}
+
 static PyMethodDef RoyalGraph_methods[] = {
     {"size", (PyCFunction) RoyalGraph_size, METH_NOARGS,
      "Returns the amount of connections"
@@ -279,6 +308,9 @@ static PyMethodDef RoyalGraph_methods[] = {
     },
     {"match", (PyCFunction) RoyalGraph_match, METH_VARARGS | METH_KEYWORDS,
     "Returns a new graph with connections that match the criteria"
+    },
+    {"str", (PyCFunction) RoyalGraph_str, METH_VARARGS | METH_KEYWORDS,
+    "Converts the graph into a string form"
     },
     {NULL}  /* Sentinel */
 };

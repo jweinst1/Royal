@@ -34,7 +34,7 @@ int Royal_Graph_trim(Royal_Graph* gr, size_t to_trim);
 
 Royal_char* Royal_Graph_append(Royal_Graph* gr, const char* e1, const char* v, const char* e2, int enforce);
 
-int Royal_Graph_str(const Royal_Graph* gr, char** output);
+int Royal_Graph_str(const Royal_Graph* gr, char** output, char split, char sepch);
 
 int Royal_Graph_copy(Royal_Graph* dst, const Royal_Graph* src, size_t upto);
 

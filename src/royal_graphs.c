@@ -73,7 +73,7 @@ Royal_char* Royal_Graph_append(Royal_Graph* gr, const char* e1, const char* v, c
 	return writable;
 }
 
-int Royal_Graph_str(const Royal_Graph* gr, char** output)
+int Royal_Graph_str(const Royal_Graph* gr, char** output, char split, char sepch)
 {
 	char* writable;
 	char* writer;
@@ -100,15 +100,15 @@ int Royal_Graph_str(const Royal_Graph* gr, char** output)
 		if(!counter) {
 			switch(sep_state) {
 				case ROYAL_GRAPH_SEP_VS:
-				    *writer++ = '/';
+				    *writer++ = split;
 				    sep_state = ROYAL_GRAPH_SEP_VE;
 				    break;
 				case ROYAL_GRAPH_SEP_VE:
-				    *writer++ = '/';
+				    *writer++ = split;
 				    sep_state = ROYAL_GRAPH_SEP_N;
 				    break;
 				case ROYAL_GRAPH_SEP_N:
-				    *writer++ = '\n';
+				    *writer++ = sepch;
 				    sep_state = ROYAL_GRAPH_SEP_VS;
 				    break;
 			}
