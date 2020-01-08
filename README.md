@@ -39,3 +39,32 @@ g2 = RoyalGraph(field=5)
 ```
 
 You can also tune the capacity of memory allocated for each graph, and the rate at which the graph will grow in memory consumption, via the `capacity` and `growth` keyword arguments.
+
+### Adding Data
+
+A graph accepts data in the form of connections. For now, the `append` method works primarily to construct a connection and add it to the graph:
+
+
+```py
+>>> g = RoyalGraph(10)
+>>> g.append('apples', 'are', 'cool')
+>>> g.append('sheets', 'are', 'messy')
+```
+
+A graph can be visualized by doing:
+
+```py
+
+>>> print(g)
+apples/are/cool
+sheets/are/messy
+
+>>>
+```
+
+Alternatively, you can convert the graph to a string with different delimeters and separation characters
+
+```py
+>>> print(g.str(split='-', sep=','))
+apples-are-cool,sheets-are-messy
+```

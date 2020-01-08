@@ -89,6 +89,12 @@ RoyalGraph_size(RoyalGraphObject *self, PyObject *Py_UNUSED(ignored))
     return PyLong_FromSize_t(self->graph.len);
 }
 
+static PyObject *
+RoyalGraph_capacity(RoyalGraphObject *self, PyObject *Py_UNUSED(ignored))
+{
+    return PyLong_FromSize_t(self->graph.cap);
+}
+
 static PyObject*
 RoyalGraph_append(RoyalGraphObject *self, PyObject *args, PyObject *kwargs)
 {
@@ -288,6 +294,9 @@ static PyMethodDef RoyalGraph_methods[] = {
     {"size", (PyCFunction) RoyalGraph_size, METH_NOARGS,
      "Returns the amount of connections"
     },
+    {"capacity", (PyCFunction) RoyalGraph_capacity, METH_NOARGS,
+     "Returns the allocated capacity in number of connections"
+    },
     {"append", (PyCFunction) RoyalGraph_append, METH_VARARGS | METH_KEYWORDS,
     "Adds a connection to the end of the graph"
     },
@@ -372,6 +381,5 @@ PyMODINIT_FUNC PyInit_royal(void)
         Py_DECREF(m);
         return NULL;
     }
-
     return m;
 }
